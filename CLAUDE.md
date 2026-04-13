@@ -103,3 +103,4 @@ HTML Canvas 기반 플랫포머 게임. 단일 `index.html` 파일(15MB+)에 모
 - 스프라이트 좌표 수정 시 미리보기에서 시각적 확인 필수
 - 버전 올릴 때: 인트로 drawIntro()와 타이틀 drawTitle() 두 곳 모두 수정
 - `opChromakey` threshold=45, HUG 이미지만 chromakey 건너뜀
+- **PC/모바일 버전 구분 필수**: 유저가 수정 대상을 명시하면 해당 버전만 패치. 명시 안 하면 반드시 물어볼 것. PC(`index.html`)와 모바일(`mobile/index.html`)을 혼동하지 않기. 양쪽 동시에 수정하면 일 2번 해야 할 수 있으므로 주의
