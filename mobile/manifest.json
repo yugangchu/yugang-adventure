@@ -1,6 +1,6 @@
 {
   "name": "유강이의 모험",
-  "short_name": "유강모험",
+  "short_name": "유강 모험",
   "description": "유강이와 함께 모험을 떠나보세요!",
   "start_url": "./index.html",
   "display": "fullscreen",
