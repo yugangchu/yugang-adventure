@@ -3,7 +3,11 @@
 HTML Canvas 기반 플랫포머 게임. 단일 `index.html` 파일(15MB+)에 모든 코드/리소스 포함.
 
 ## 프로젝트 구조
-- `index.html` — 게임 전체 (HTML/CSS/JS + base64 이미지/BGM/SFX)
+- `index.html` — PC 버전 게임 전체 (HTML/CSS/JS + base64 이미지/BGM/SFX)
+- `mobile/index.html` — 모바일 버전 (터치 조작, 모바일 난이도, PWA)
+- `mobile/manifest.json` — PWA 매니페스트
+- `mobile/sw.js` — 서비스워커 (오프라인 캐시, 캐시명에 버전 포함)
+- `mobile/icon-192.png`, `icon-512.png` — PWA 아이콘
 - `thumb.png` — 썸네일
 - `opening_cutscene.html` — 참고용 (미사용)
 
@@ -26,10 +30,17 @@ HTML Canvas 기반 플랫포머 게임. 단일 `index.html` 파일(15MB+)에 모
 - `opChromakey()` — 스프라이트 배경 제거 (2-pass: 배경 제거 + 눈동자 복원)
 
 ## 버전 규칙
+### PC 버전 (`index.html`)
 - `X.Y` 형식. Y는 9 다음 10, 11... (예: 7.9 → 7.10 → 7.11)
 - X(앞자리)는 대규모 패치에서만 올림
 - 매 커밋마다 Y를 1씩 올림
 - 인트로 화면 + 타이틀 화면 우하단에 버전 표시
+
+### 모바일 버전 (`mobile/index.html`)
+- `X.Y` 형식, PC와 독립 버전 체계 (v1.0부터 시작)
+- **매 업데이트(커밋)마다 반드시 Y를 1씩 올림** (말 안 해도 자동으로)
+- 인트로 화면 + 타이틀 화면 우하단에 버전 표시
+- `mobile/sw.js`의 `CACHE_NAME`도 같은 버전으로 동기화 (예: `yugang-mobile-v1.3`)
 
 ## 패치 기록
 
