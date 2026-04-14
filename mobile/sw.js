@@ -1,10 +1,15 @@
-const CACHE_NAME='yugang-mobile-v3.0';
+const CACHE_NAME='yugang-mobile-v3.1';
 const ASSETS=['./index.html','./manifest.json','./icon-192.png','./icon-512.png'];
 
 self.addEventListener('install',function(e){
   e.waitUntil(
     caches.open(CACHE_NAME).then(function(cache){
-      return cache.addAll(ASSETS);
+      // cache:'reload'로 브라우저 HTTP 캐시 우회 — 항상 최신 자산 받아오기
+      return Promise.all(ASSETS.map(function(a){
+        return fetch(new Request(a,{cache:'reload'})).then(function(resp){
+          if(resp.ok)return cache.put(a,resp);
+        });
+      }));
     }).then(function(){return self.skipWaiting();})
   );
 });
@@ -24,7 +29,8 @@ self.addEventListener('fetch',function(e){
   e.respondWith(
     caches.open(CACHE_NAME).then(function(cache){
       return cache.match(e.request).then(function(cached){
-        var networkFetch=fetch(e.request).then(function(resp){
+        // 백그라운드 갱신은 cache:'no-cache'로 HTTP 캐시 우회 (서버에 Etag/Last-Modified 검증)
+        var networkFetch=fetch(e.request,{cache:'no-cache'}).then(function(resp){
           if(resp&&resp.ok){cache.put(e.request,resp.clone());}
           return resp;
         }).catch(function(){return cached||cache.match('./index.html');});
