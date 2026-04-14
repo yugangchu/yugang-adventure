@@ -1,4 +1,4 @@
-const CACHE_NAME='yugang-mobile-v2.4';
+const CACHE_NAME='yugang-mobile-v2.5';
 const ASSETS=['./index.html','./manifest.json','./icon-192.png','./icon-512.png'];
 
 self.addEventListener('install',function(e){
@@ -17,17 +17,19 @@ self.addEventListener('activate',function(e){
   );
 });
 
+// stale-while-revalidate: 캐시 즉시 반환 + 백그라운드에서 네트워크 갱신
+// → 현재 실행은 구 버전으로, 다음 앱 실행부터 새 버전 적용
 self.addEventListener('fetch',function(e){
+  if(e.request.method!=='GET'){return;}
   e.respondWith(
-    caches.match(e.request).then(function(cached){
-      if(cached)return cached;
-      return fetch(e.request).then(function(resp){
-        if(resp.ok){
-          var clone=resp.clone();
-          caches.open(CACHE_NAME).then(function(c){c.put(e.request,clone);});
-        }
-        return resp;
+    caches.open(CACHE_NAME).then(function(cache){
+      return cache.match(e.request).then(function(cached){
+        var networkFetch=fetch(e.request).then(function(resp){
+          if(resp&&resp.ok){cache.put(e.request,resp.clone());}
+          return resp;
+        }).catch(function(){return cached||cache.match('./index.html');});
+        return cached||networkFetch;
       });
-    }).catch(function(){return caches.match('./index.html');})
+    })
   );
 });
