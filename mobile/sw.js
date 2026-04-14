@@ -1,4 +1,4 @@
-const CACHE_NAME='yugang-mobile-v3.5';
+const CACHE_NAME='yugang-mobile-v3.6';
 const ASSETS=['./index.html','./manifest.json','./icon-192.png','./icon-512.png'];
 
 self.addEventListener('install',function(e){
