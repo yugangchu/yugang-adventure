@@ -8,6 +8,7 @@ HTML Canvas 기반 플랫포머 게임. 단일 `index.html` 파일(15MB+)에 모
 - `mobile/manifest.json` — PWA 매니페스트
 - `mobile/sw.js` — 서비스워커 (오프라인 캐시, 캐시명에 버전 포함)
 - `mobile/icon-192.png`, `icon-512.png` — PWA 아이콘
+- `star.png`, `mobile/star.png` — 별점 아이콘 (PC/모바일 공통 에셋)
 - `thumb.png` — 썸네일
 - `opening_cutscene.html` — 참고용 (미사용)
 
@@ -42,11 +43,16 @@ HTML Canvas 기반 플랫포머 게임. 단일 `index.html` 파일(15MB+)에 모
 - 인트로 화면 + 타이틀 화면 우하단에 버전 표시
 - `mobile/sw.js`의 `CACHE_NAME`도 같은 버전으로 동기화 (예: `yugang-mobile-v1.3`)
 
-## 패치 기록
+## 패치 기록 — PC (`index.html`)
 
-### v7.x — 세이브/일시정지 + UI 개선
+### v7.x — UI 개선 + 모바일 기능 포팅
 | 버전 | 내용 |
 |---|---|
+| v7.8 | **Phase 2: 별점 시스템** — calcStars + stageStars 난이도별 저장, 월드맵 별 표시, 클리어 화면 Candies 표기, star.png 에셋 |
+| v7.7 | **Phase 1: 밸런스 패치 (모바일 v2.4 기반)** — W1 버프, 1-1 바운싱 제거, W1 초반 발판 간격 상향(si<5만), 컨베이어 속도 스케일링 + 2-1/2-2 적응 구간. **W2 너프는 PC 미적용** |
+| v7.6 | 버튼 스타일 모바일과 분리 + CLAUDE.md 규칙 추가 |
+| v7.5 | 타이틀/인트로 리디자인 + 픽셀아트 버튼 |
+| v7.4 | Noto Sans KR 폰트 적용 (모바일과 통일) |
 | v7.3 | 이어하기/처음부터 버튼 EASY~HARD와 정렬, HUD 레이아웃 고정 |
 | v7.2 | 이어하기/처음부터 클릭 시 노란색 플래시 효과 |
 | v7.1 | 타이틀에서 HUD 표시 (스테이지란 → "Main Menu"), 하트 난이도 반영 |
@@ -85,6 +91,41 @@ HTML Canvas 기반 플랫포머 게임. 단일 `index.html` 파일(15MB+)에 모
 - 가이드/설정 버튼 글로우 스타일
 - drawGuide 괄호 버그 수정
 
+## 패치 기록 — 모바일 (`mobile/index.html`)
+
+### v3.x — PWA 자동 업데이트
+| 버전 | 내용 |
+|---|---|
+| v3.1 | HTTP 캐시 우회 수정 — install에서 `cache:'reload'`, fetch에서 `cache:'no-cache'` (GH Pages max-age=600으로 구 index.html 캐싱되던 문제 해결) |
+| v3.0 | 자동 업데이트 테스트용 버전 bump (코드 변경 없음) |
+
+### v2.x — 밸런스 + 자동 업데이트
+| 버전 | 내용 |
+|---|---|
+| v2.5 | **PWA 자동 업데이트** (stale-while-revalidate). `updateViaCache:'none'`, `visibilitychange → reg.update()`, fetch 핸들러 SWR 전략 |
+| v2.4 | **별점 로직 복원** (lost 기반, ≤-2 ★★★ / ≤1 ★★), **1-1 바운싱 제거** (bouncing[0]=0 + DIFF_BONUS W1 bouncing 삭제) |
+| v2.3 | 별점 개편 시도 (deaths 기반) — v2.4에서 롤백 |
+| v2.2 | **W1 버프 / W2 너프 / 컨베이어 속도 스케일링**. gap si<3 상향, conveyor 2-1=0.65/2-2=0.80/2-3~2-5 스케일 |
+| v2.1 | 발판 간격 PC와 동일하게 복구 |
+| v2.0 | 점프 상향 + 2단 점프 가이드 |
+
+### v1.x — 모바일 최초 런칭 → UI 다듬기 (2026-04-14 새벽)
+| 버전 | 내용 |
+|---|---|
+| v1.12 | 2단 점프(MAX_JUMPS=2) + 공유 카드 리디자인 |
+| v1.11 | 클리어 결과 카드 공유 기능 (Web Share API) |
+| v1.10 | PC와 버튼 스타일 분리 |
+| v1.9 | 난이도/플레이 버튼 스타일 복구 |
+| v1.8 | 타이틀/인트로 리디자인 (픽셀아트 배경 + 버튼 PNG) |
+| v1.7 | 별 PNG 아이콘, 월드맵 전체 별 표시, 설정 정렬 |
+| v1.6 | 별점 시스템 (난이도별 저장, 월드맵 별, 둥근 별 UI), 볼륨바 제거 |
+| v1.5 | 별점/클리어/게임오버/설정 글래스 UI, 해상도 부스트 |
+| v1.4 | 시간 300s, 게임오버 정렬, 앱 이름, 해상도 개선 |
+| v1.3 | 튜토리얼/조이스틱/HUD 개선 |
+| v1.2 | pause 메뉴 재설계, 버튼 글래스 디자인, HUD pill, BGM/SFX 버그 수정 |
+| v1.1 | HUD 리디자인 + Noto Sans KR Bold 폰트 + 아이콘 교체 |
+| v1.0 | 모바일 버전 최초 추가, PC→모바일 자동 리다이렉트 |
+
 ## 스프라이트 시트
 - **공주** (`OP_PRINCESS_B64`, 684x365): WALK, IDLE, CRY, HAPPY 좌표 매핑됨
 - **악당** (`OP_VILLAIN_B64`, 684x365): IDLE, FLOAT, KIDNAP, DEFEAT
@@ -93,10 +134,105 @@ HTML Canvas 기반 플랫포머 게임. 단일 `index.html` 파일(15MB+)에 모
 - 움직임좌표 파일: `~/Desktop/yugang adventure/` 에 공주/악당/유강이 좌표 txt
 
 ## 세이브 시스템
-- `localStorage` 키: `yugang_save`
-- 저장 데이터: currentStage, currentDiff, sharedLives, totalScore, acornCount, bgmOn, sfxOn, masterVol
+- `localStorage` 키: PC `yugang_save` / 모바일 `yugang_save_m`
+- 저장 데이터: currentStage, currentDiff, sharedLives, totalScore, acornCount, bgmOn, sfxOn, masterVol, **stageStars**
+- `stageStars` 구조: `{easy:[10칸], normal:[10칸], hard:[10칸]}` — 난이도별 스테이지별 최고 별점
+- 구 포맷 호환: `Array.isArray(stageStars)`면 Normal 데이터로 마이그레이션
 - 저장 시점: 스테이지 클리어, 설정 변경, 게임 중 타이틀 복귀
-- 게임오버/올클리어 시 진행 데이터 삭제 (설정만 유지)
+- 게임오버/올클리어 시 진행 데이터 삭제 (설정/별점만 유지)
+
+## 코드 구조 & 주요 위치 (PC/모바일 대부분 공통, 새 대화 시 참고용)
+
+**중요**: 줄 번호는 수시로 바뀌므로 `grep`/`Grep`으로 **심볼명 검색**이 빠름. 아래는 심볼명 가이드.
+
+### 핵심 상수 (파일 상단 200~500줄 부근)
+- `JFORCE, GRAV_UP, GRAV_DOWN, CUT_VY` — 점프 물리 (모바일엔 `MAX_JUMPS=2` 추가)
+- `MAP_W=4060, BASE_TIME=300` — 맵 길이, 제한시간
+- `CANDY_LIFE_EVERY=5, CANDY_INVULN_EVERY=10, INVULN_DURATION=300` — 사탕 효과
+- `DIFFS` — 난이도별 {label, color, spd, enemySpd, lives, desc}
+- `STAGE_THEMES` — 10개 스테이지 배경 테마 (skyTop/skyBot/stars/lava 등)
+- `SP_COUNT[10]` — 스테이지별 {mov, fal, sha} 특수 발판 개수
+- `DENSITY` — 적/장애물 종류별 10스테이지 개수 배열
+- `DIFF_BONUS = {easy:{w1,w2}, normal:..., hard:...}` — 난이도별 DENSITY 보정치
+
+### 스테이지 생성 — `function makeStage(si)`
+- gap 공식: `gapMax = floor(d.spd*airF*(gapK-si*0.03)), gapMin = gapBase+si*2`
+  - PC v7.7+, 모바일 v2.2+: W1만 `gapK=0.75, gapBase=20`, W2는 0.60/10
+- 발판 자동 생성 → usable 필터링 → mov/fal/sha로 교체 → 장애물/적 배치 → 사탕 분배
+- 컨베이어 속도 (PC v7.7+, 모바일 v2.2+): `convBase = si===5?0.65 : si===6?0.80 : 0.95+(si-7)*0.10`; `spd = convBase+rand()*0.4`
+
+### 게임 루프
+- `update()` / `draw()` — 메인 루프
+- `initStage(si)` — 스테이지 초기화. `stageLivesStart=sharedLives; stageAcornStart=acornCount;` 스냅샷 여기서
+- `respawnEnemies()` — 사망 후 적 재배치
+- `takeDmg()` / `takeFallDmg()` — 피격/추락 데미지
+
+### UI/화면
+- `drawIntro()` — 인트로 화면 (버전 표시 1)
+- `drawTitle()` — 타이틀 화면 (버전 표시 2)
+- `drawOpening()` / `drawEnding()` — 컷씬
+- `drawWorldmap()` 또는 `startWorldMap(from,to)` + 내부 forEach — 월드맵 (별점 PNG 표시)
+- `drawClear()` — 스테이지 클리어 화면 (별점 + Candies 표기)
+- `drawGameover()` / `drawAllClear()` — 게임오버/엔딩
+- `drawPaused()` — 일시정지 메뉴 (ESC)
+- `drawGuide()` / `drawSettings()` — 가이드/설정 오버레이
+- 모바일만: `drawStageResult()` (클리어 결과 카드 + 공유 버튼)
+
+### 별점 시스템 (PC v7.8+, 모바일 v1.6+)
+- `function calcStars()`:
+  ```js
+  var lost = stageLivesStart - sharedLives;
+  if(lost<=-2) return 3;  // ★★★
+  if(lost<=1)  return 2;  // ★★
+  return 1;               // ★
+  ```
+- 저장: `stageStars[currentDiff][currentStage] = max(기존, 새 별점)`
+- 별 이미지: `_starImg = new Image(); _starImg.src='star.png'`
+- 월드맵에서 모든 기록된 스테이지에 `stageStars[currentDiff][gi]` 기반으로 3개 별 표시
+
+### 사운드
+- `bgmGetDesired()` → `bgmSwitch()` — 게임 상태별 BGM 자동 전환
+- `sfxTone, sfxJump, sfxHit, sfxCandy, sfxStomp` — Web Audio API 합성
+
+### 스프라이트 처리
+- `opChromakey(img, threshold, preserveEyes)` — 2-pass: 배경 제거 + 눈동자 복원
+- threshold=45 기본, `OP_HUG_B64`는 chromakey 건너뜀
+
+### PWA (모바일 전용)
+- `mobile/sw.js` — 서비스워커
+  - `CACHE_NAME = 'yugang-mobile-vX.Y'` (매 버전 동기화 필수)
+  - install: `cache:'reload'`로 ASSETS fetch → HTTP 캐시 우회
+  - fetch: stale-while-revalidate (캐시 즉시 반환 + 백그라운드 갱신 `cache:'no-cache'`)
+- `mobile/index.html` 상단에 registration: `{updateViaCache:'none'}` + visibilitychange reg.update()
+
+## 밸런스 튜닝 치트시트
+
+**원하는 조정 → 어디 건드리나**
+
+| 조정 목표 | 수정 위치 |
+|---|---|
+| 특정 스테이지 적/장애물 증감 | `DENSITY` 배열의 [si] 인덱스 |
+| 난이도별 추가 적/장애물 | `DIFF_BONUS.normal.w1/w2` 또는 `.hard.w1/w2` |
+| 특정 스테이지 이동/낙하/흔들 발판 개수 | `SP_COUNT[si]` 의 {mov, fal, sha} |
+| 발판 간격 | `makeStage()` 내 gapK/gapBase 공식 |
+| 컨베이어 속도 | `makeStage()` 내 convBase 공식 |
+| 사탕 개수 (난이도별) | `makeStage()` 내 `acCount = ?16:?14:19` |
+| 물리 점프감 | 파일 상단 `JFORCE/GRAV_UP/GRAV_DOWN` |
+| 난이도 목숨/속도 | `DIFFS[난이도].lives/spd/enemySpd` |
+| 별점 기준 | `calcStars()` 내부 lost 임계값 |
+| BASE_TIME (제한시간) | 파일 상단 `BASE_TIME=300` |
+
+## 빠르게 파일 탐색하기 (새 대화 시)
+
+**15MB 파일을 통째로 읽지 말 것.** 다음 패턴 사용:
+```
+Grep "const DENSITY\|const SP_COUNT\|const DIFF_BONUS" → 밸런스 위치
+Grep "function makeStage\|function initStage\|function calcStars" → 핵심 함수
+Grep "drawTitle\|drawClear\|drawWorldmap" → UI 함수
+Grep "v7\.\|v3\.\|fillText('v" → 현재 버전 위치 (버전 업 시 2곳 수정)
+Grep "CACHE_NAME" (sw.js) → 모바일 SW 캐시명
+```
+Read할 때는 `offset`/`limit` 필수.
 
 ## 작업 시 주의사항
 
