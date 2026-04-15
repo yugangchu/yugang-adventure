@@ -45,7 +45,49 @@ HTML Canvas 기반 플랫포머 게임. 단일 `index.html` 파일(15MB+)에 모
 
 ## 패치 기록 — PC (`index.html`)
 
-### v7.x — UI 개선 + 모바일 기능 포팅
+### v8.x — 보스전 밸런스 공식화 + 인트로 영문 통일 (최신)
+| 버전 | 내용 |
+|---|---|
+| v8.3 | **인트로 컷씬 'Click or press Space to continue' 4개 언어 영어 통일** (모바일 v3.9 공통) |
+| v8.2 | 보스전 HUD 레이블 'Hidden Stage' 표기 |
+| v8.1 | 보스 인트로 하트 애니메이션 공식 정합 (5별당 1하트) |
+| v8.0 | **보스전 밸런스 공식화** — 난이도별 투사체 속도 + 목숨 공식 + 위자드 아우라 |
+
+### v7.9~v7.38 — 다국어 시스템 + 보스전 시스템 구현/튜닝
+| 버전 | 내용 |
+|---|---|
+| v7.38 | 보스전 소폭 상향 3종 |
+| v7.37 | 보스전 텔레포트 no-repeat + 좌하 발판 고정 가시 |
+| v7.36 | 보스전 난이도 패치 (중간 강도) |
+| v7.35 | 보스전 배경 이미지 교체 + 인트로 별 PNG 적용 |
+| v7.34 | Dark Archmage 디자인 카리스마 업그레이드 |
+| v7.33 | 보스 인트로 별 카운터 단순화 + 카운트다운 SFX + 힌트 간격 |
+| v7.32 | Dark Archmage 디자인 대폭 업그레이드 (화려한 보스 비주얼) |
+| v7.31 | 보스 인트로 fancy 타이틀 + 별→하트 카운트다운 + 힌트 문구 |
+| v7.30 | 보스전 UX 개선 3종 |
+| v7.29 | 승리/패배 문구 차별화 + 보스 인트로 별→하트 애니메이션 |
+| v7.28 | 보스전 인트로 더 길게 + 무적유강 스택 박스 보스전 숨김 |
+| v7.27 | 보스전 인트로 복원 + P1/P2 텔레포트 주기 단축 |
+| v7.26 | 게임오버 화면 정렬/문구 개선 + 밟기 후 무적 |
+| v7.25 | 보스전 사망 후 화면 가운데에서 리스폰 |
+| v7.24 | 보스전 난이도 2차 하향 + 투사체 속도/색상 조정 |
+| v7.23 | 미니언 스폰/보스 텔레포트 후 0.5초 무적 (UX 개선) |
+| v7.22 | **보스전 치명 버그 수정** + 난이도 대폭 하향 + 미니언 디자인 통일 |
+| v7.21 | 보스 업데이트/렌더링 에러 처리 (게임 루프 정지 방지) |
+| v7.20 | 보스전 진입 지연 해소 + **CLAUDE.md 작업 원칙 문서화** (반복 실수 원인 분석) |
+| v7.19 | 보스전 투명 버그 수정 + 디버그 버튼 추가 |
+| v7.18 | 보스전 흐름 버그 수정 (Next Stage→ending 직행 방지) |
+| v7.17 | 2-5 클리어 후 '엔딩 보기' 버튼 'Next Stage'로 변경 (모바일 v3.8 공통) |
+| v7.16 | 보스전 구조 변경: 1-5/2-5 원상복구 + 2-5 클리어 후 최종보스 |
+| v7.15 | **보스전 1차 구현** (W1 슬라임 킹 + W2 암흑 마법사, 828줄 추가) |
+| v7.14 | wmNext 통일 (Next Stage, ▶ 제거) (모바일 v3.6 공통) |
+| v7.13 | 다국어 수정 (모바일 v3.5 공통) |
+| v7.12 | 다국어 Phase B — 가이드/컷신/스테이지명/공유 (모바일 v3.4 공통) |
+| v7.11 | **다국어 시스템** (ko/en/zh/ja) 1차 적용 |
+| v7.10 | 첫 방문자 튜토리얼 추가 (1-1 진입 시) |
+| v7.9 | Restart Stage 버그 수정 (진행도 완전 복원) (모바일 v3.2 공통) |
+
+### v7.0~v7.8 — UI 개선 + 모바일 기능 포팅
 | 버전 | 내용 |
 |---|---|
 | v7.8 | **Phase 2: 별점 시스템** — calcStars + stageStars 난이도별 저장, 월드맵 별 표시, 클리어 화면 Candies 표기, star.png 에셋 |
@@ -93,9 +135,18 @@ HTML Canvas 기반 플랫포머 게임. 단일 `index.html` 파일(15MB+)에 모
 
 ## 패치 기록 — 모바일 (`mobile/index.html`)
 
-### v3.x — PWA 자동 업데이트
+### v3.x — 다국어 + 가이드 풀텍스트 + 세이브 시스템 보강
 | 버전 | 내용 |
 |---|---|
+| v3.10 | **세이브 시스템 종합 보강** (1-3 클리어 후 종료 시 기록 초기화 이슈 대응) — `visibilitychange/pagehide/beforeunload/blur/freeze` 자동저장 + `initStage/startWorldMap/drawClear/takeDmg/takeFallDmg`에 saveGame 추가 + **read-back 검증** (silent fail 감지) + `navigator.storage.persist()` + `_probeStorage` 진단 로그 |
+| v3.9 | **인트로 컷씬 'Tap to continue' 4개 언어 영어 통일** (PC v8.3 공통) |
+| v3.8 | 2-5 클리어 후 '엔딩 보기' 버튼 'Next Stage'로 변경 (PC v7.17 공통) |
+| v3.7 | 가이드 PC와 동일한 풀 텍스트 + 2줄 카드 레이아웃 |
+| v3.6 | wmNext 통일 (Next Stage, ▶ 제거) (PC v7.14 공통) |
+| v3.5 | 다국어 수정 (PC v7.13 공통) |
+| v3.4 | 다국어 Phase B — 가이드/컷신/스테이지명/공유 (PC v7.12 공통) |
+| v3.3 | **다국어 시스템** (ko/en/zh/ja) 1차 적용 |
+| v3.2 | Restart Stage 버그 수정 (진행도 완전 복원) (PC v7.9 공통) |
 | v3.1 | HTTP 캐시 우회 수정 — install에서 `cache:'reload'`, fetch에서 `cache:'no-cache'` (GH Pages max-age=600으로 구 index.html 캐싱되던 문제 해결) |
 | v3.0 | 자동 업데이트 테스트용 버전 bump (코드 변경 없음) |
 
@@ -135,11 +186,30 @@ HTML Canvas 기반 플랫포머 게임. 단일 `index.html` 파일(15MB+)에 모
 
 ## 세이브 시스템
 - `localStorage` 키: PC `yugang_save` / 모바일 `yugang_save_m`
-- 저장 데이터: currentStage, currentDiff, sharedLives, totalScore, acornCount, bgmOn, sfxOn, masterVol, **stageStars**
+- 저장 데이터: currentStage, currentDiff, sharedLives, totalScore, acornCount, bgmOn, sfxOn, masterVol, lang, **stageStars**, _ts (모바일 v3.10+)
 - `stageStars` 구조: `{easy:[10칸], normal:[10칸], hard:[10칸]}` — 난이도별 스테이지별 최고 별점
 - 구 포맷 호환: `Array.isArray(stageStars)`면 Normal 데이터로 마이그레이션
-- 저장 시점: 스테이지 클리어, 설정 변경, 게임 중 타이틀 복귀
 - 게임오버/올클리어 시 진행 데이터 삭제 (설정/별점만 유지)
+
+### 저장 시점 (PC)
+- 스테이지 클리어(whiteoutT), 설정 변경, 게임 중 타이틀 복귀, 일시정지 Main Menu
+
+### 저장 시점 (모바일, v3.10+)
+**게임 플레이 흐름**:
+- 스테이지 클리어(`whiteoutT>=1`), 스테이지 진입(`initStage`), 월드맵 진입(`startWorldMap`), 별점 갱신(`drawClear`, 1회 가드), 피격/추락(`takeDmg`/`takeFallDmg`), 설정 변경, 게임 중 타이틀 복귀, 일시정지 Main Menu
+
+**앱 라이프사이클 이벤트**:
+- `visibilitychange === 'hidden'` (백그라운드 전환)
+- `pagehide` / `beforeunload` (페이지 이탈)
+- `blur` (포커스 상실)
+- `freeze` (모던 브라우저 페이지 동결)
+
+### 모바일 세이브 강화 (v3.10+)
+- `saveGame()`은 **read-back 검증** — setItem 직후 getItem해서 JSON 일치 확인 → silent quota/eviction 감지
+- 실패 시 `console.error/warn` 출력 (기존엔 try/catch로 삼키던 것 제거)
+- 시작 시 `navigator.storage.persist()` 요청 → OS evict 방지 (iOS PWA 메모리 압박 대응)
+- `_probeStorage` IIFE — 로드 직후 localStorage 사용 가능 여부 콘솔 진단
+- `[storage]/[loadGame]/[saveGame]` 접두 로그로 개발자도구에서 흐름 추적 가능
 
 ## 코드 구조 & 주요 위치 (PC/모바일 대부분 공통, 새 대화 시 참고용)
 
