@@ -48,6 +48,8 @@ HTML Canvas 기반 플랫포머 게임. 단일 `index.html` 파일(15MB+)에 모
 ### v8.x — 보스전 밸런스 공식화 + 인트로 영문 통일 (최신)
 | 버전 | 내용 |
 |---|---|
+| v8.7 | **세이브 로드 하이드레이션 보강 + `lang` 저장 버그 수정** (모바일 v3.15 공통 원인) — 로드 시 `currentStage/sharedLives/totalScore/acornCount` 전역 하이드레이트 추가 (모바일과 대칭). `saveGame`에 `lang:currentLang` 누락분 추가 (기존엔 스테이지 클리어 시마다 lang이 undefined로 덮어써져 다음 접속 시 한국어로 복귀하던 미세 버그). `clearProgress`에 전역 리셋 추가 (게임오버/올클리어 후 진행 잔재가 다시 저장되는 잠재 위험 제거). PC는 lifecycle 자동저장이 없어 실증상은 없었으나, 모바일과의 대칭성/미래 확장 대비. |
+| v8.6 | 디버그 보스 버튼 위치/색상 모바일과 통일 |
 | v8.5 | **보스전 부활 무적 버그 수정** (모바일 v3.13 공통) — 기존엔 `takeDmg`에서 `invTimer=60` 세팅 후 `resetPlayer`가 `invTimer=0`으로 덮어써서 부활 직후 억까 피격 가능. 이제 보스전 resetPlayer는 `invTimer=30` (0.5초 무적) 부여. 일반 스테이지는 기존 동작 유지. |
 | v8.4 | **2-5 클리어 흐름 통일** — 기존엔 2-5 clear 시 clear 화면 스킵하고 바로 보스 진입이었으나, 이제 일반 스테이지처럼 clear 화면 + 별점 지급 → Continue 클릭/Space로 보스 진입 (모바일 v3.11 공통). 획득 가능 총 별 30개로 확장 (기존 27). 부작용: `bossLifeCount` max 8→9 하트 (미세 버프) |
 | v8.3 | **인트로 컷씬 'Click or press Space to continue' 4개 언어 영어 통일** (모바일 v3.9 공통) |
@@ -140,6 +142,8 @@ HTML Canvas 기반 플랫포머 게임. 단일 `index.html` 파일(15MB+)에 모
 ### v3.x — 다국어 + 가이드 풀텍스트 + 세이브 시스템 보강 + **보스전 이식**
 | 버전 | 내용 |
 |---|---|
+| v3.15 | **🚨 세이브 유실 치명 버그 수정** (PC v8.7 공통 원인) — v3.10에서 lifecycle 자동저장 5종 (visibilitychange/pagehide/beforeunload/blur/freeze)을 추가했으나 **로드 시 `currentStage`와 `stageStars` 전역 하이드레이트가 누락**돼, 타이틀에서 앱 전환/화면 끔 한 번만 해도 `saveGame()`이 초기값(currentStage=0, stageStars=제로)으로 기존 세이브를 덮어쓰는 버그. read-back 검증은 "제로값 저장"도 성공 처리해 무의미. **수정**: `preloadFrames`에서 `currentStage/stageStars/sharedLives/totalScore/acornCount` 전부 하이드레이트 + `clearProgress`에 전역 리셋 추가 (잔재 재저장 방지). |
+| v3.14 | 디버그 보스 버튼 위치/색상 통일 |
 | v3.13 | **보스전 부활 무적 버그 수정 + 위자드 아우라 이식** (PC v8.5 공통) — resetPlayer 보스전 분기에 `invTimer=30` 추가 (0.5초 부활 무적). 추가로 `drawWizard` 함수에 `isBossStage` 분기 노랑 펄싱 아우라 이식 누락분 복구 (PC v8.0 기능) — 위자드 미니언이 모바일에서 배경에 묻혀 안 보이던 이슈 해결. |
 | v3.12 | **타이틀 화면 BOSS TEST 버튼 추가** (이식 테스트용, 추후 제거 예정) — 좌하단 반투명 빨강 버튼, 탭 시 현재 난이도로 보스 아레나 바로 진입 |
 | v3.11 | **보스전 시스템 신규 이식** (PC v7.15~v8.4 전체 누적 기능 포팅) + **2-5 클리어 흐름 통일** (PC v8.4 공통). 보스전 전용 난이도 조정: 투사체 속도 × 0.8 배율 (터치 조작 배려), 미니언 스폰 주기 × 1.25~1.33 (bat/darkSlime), 운석 주기 × 1.25~1.4, 위자드 사격 주기 120→160. 유지 항목: 보스 HP 공식 / 스폰 후 무적 시간 / 텔레포트 주기 / 보스 목숨 보너스 공식. UI 조정: 보스 HP 바 y=42로 이동 (canvas HUD pill과 겹침 방지), 보스전 중 sTime/무적유강 박스 숨김, pause 버튼은 인트로 중 비활성. `mobile/boss_bg.png` 자산 추가 + sw.js ASSETS 등록. I18N 3개 키 추가 (hiddenBoss/pressToBegin/howToDefeat). `pressToBegin`은 'Tap to begin' 영어 통일 (모바일 터치 환경) |
