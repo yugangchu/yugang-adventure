@@ -1,4 +1,4 @@
-const CACHE_NAME='yugang-mobile-v3.20';
+const CACHE_NAME='yugang-mobile-v3.21';
 const ASSETS=['./index.html','./manifest.json','./icon-192.png','./icon-512.png','./star.png','./btn-play.png','./btn-diff.png','./title-bg.png','./boss_bg.png'];
 
 self.addEventListener('install',function(e){
