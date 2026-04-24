@@ -45,9 +45,13 @@ HTML Canvas 기반 플랫포머 게임. 단일 `index.html` 파일(15MB+)에 모
 
 ## 패치 기록 — PC (`index.html`)
 
-### v8.x — 보스전 밸런스 공식화 + 인트로 영문 통일 (최신)
+### v8.x — 버그 수정 + 보스전 밸런스 + 호환성 (최신)
 | 버전 | 내용 |
 |---|---|
+| v8.11 | **roundRect 폴리필** — 구형 Android/Windows 브라우저 크래시 방지 (iOS/macOS 영향 없음) |
+| v8.10 | **버그 7종 수정** — 일시정지 BGM 유지, 보스 승리 무적, PC 난이도 버튼 히트박스, PC 별점 saveGame, PC 보스전 숨김 버튼 가드, 모바일 보스전 UI 라벨 |
+| v8.9 | **버그 5종 수정** — BGM 이중재생(모바일), restartStage 보스 재진입(모바일), 일시정지 BGM 토글 bgmUpdate, sharedLives===0 falsy, 올클리어 한국어 다국어화(allClearMsg) |
+| v8.8 | **오디오 버그 수정** — getSfxCtx() suspended resume(PC+모바일), 모바일 bgmSwitch 엔딩 BGM, 모바일 2-5 rune glyphs 삭제 |
 | v8.7 | **세이브 로드 하이드레이션 보강 + `lang` 저장 버그 수정** (모바일 v3.15 공통 원인) — 로드 시 `currentStage/sharedLives/totalScore/acornCount` 전역 하이드레이트 추가 (모바일과 대칭). `saveGame`에 `lang:currentLang` 누락분 추가 (기존엔 스테이지 클리어 시마다 lang이 undefined로 덮어써져 다음 접속 시 한국어로 복귀하던 미세 버그). `clearProgress`에 전역 리셋 추가 (게임오버/올클리어 후 진행 잔재가 다시 저장되는 잠재 위험 제거). PC는 lifecycle 자동저장이 없어 실증상은 없었으나, 모바일과의 대칭성/미래 확장 대비. |
 | v8.6 | 디버그 보스 버튼 위치/색상 모바일과 통일 |
 | v8.5 | **보스전 부활 무적 버그 수정** (모바일 v3.13 공통) — 기존엔 `takeDmg`에서 `invTimer=60` 세팅 후 `resetPlayer`가 `invTimer=0`으로 덮어써서 부활 직후 억까 피격 가능. 이제 보스전 resetPlayer는 `invTimer=30` (0.5초 무적) 부여. 일반 스테이지는 기존 동작 유지. |
@@ -138,6 +142,20 @@ HTML Canvas 기반 플랫포머 게임. 단일 `index.html` 파일(15MB+)에 모
 - drawGuide 괄호 버그 수정
 
 ## 패치 기록 — 모바일 (`mobile/index.html`)
+
+### v4.x — 오디오 시스템 대수술 + 버그 수정 + 호환성 (최신)
+| 버전 | 내용 |
+|---|---|
+| v4.1 | **roundRect 폴리필** — 구형 Android WebView 크래시 방지 (iOS 영향 없음) |
+| v4.0 | **성능 최적화** — 불필요한 오디오 방어 코드 제거 (keep-alive oscillator, 매 터치 ping, SFX suspended 래퍼). 무음 WAV가 세션 유지하므로 불필요 |
+| v3.25 | **BGM OFF 시 무음 WAV 재생으로 iOS 오디오 세션 유지** — `bgmAudio.pause()` + `_silentAudio`(0.1초 무음 WAV 루프, volume=0.01). iOS 오디오 세션이 HTMLAudioElement 재생 중일 때만 활성 유지되는 것을 발견. 이전 시도들(resume, volume=0, muted, AudioContext keep-alive) 전부 실패 |
+| v3.22~v3.24 | (v3.25에 통합) BGM/SFX 독립 제어 시도: muted 속성, AudioContext keep-alive oscillator, SFX suspended 방어 등 |
+| v3.21 | (v3.25에 통합) silent Audio 세션 유지 1차 시도 |
+| v3.20 | (실패) volume=0 방식 — BGM은 꺼지지만 다른 코드가 볼륨 덮어씀 |
+| v3.19 | (실패) BGM 토글 시 sfxCtx.resume() — iOS가 세션 없으면 무시 |
+| v3.18 | **버그 7종 수정** — 일시정지 BGM 유지, 보스 승리 무적, 보스전 UI 라벨(Stage 2-5→BOSS FIGHT), PC 숨김 버튼 가드, PC 난이도 히트박스, PC 별점 saveGame |
+| v3.17 | **버그 5종 수정** — BGM 이중재생, restartStage 보스 재진입, 일시정지 BGM 토글, sharedLives falsy, 올클리어 다국어화 |
+| v3.16 | **오디오 버그 3종** — getSfxCtx() resume, bgmSwitch 엔딩 BGM, 2-5 rune glyphs 삭제 |
 
 ### v3.x — 다국어 + 가이드 풀텍스트 + 세이브 시스템 보강 + **보스전 이식**
 | 버전 | 내용 |
@@ -515,6 +533,52 @@ Read할 때는 `offset`/`limit` 필수.
 | 버튼 레이블 변경 | 같은 키를 쓰는 다른 UI 위치 / 버튼의 실제 동작이 레이블과 일치하는지 |
 | UI 배치 변경 | 클릭 영역 좌표도 함께 변경 |
 | 보스전 관련 | `bossIntroTimer` 지속 / `stageDef.isBossStage` 분기 / restartStage 보스 재진입 / 카메라 고정 / sTime 정지 |
+| 오디오 관련 | 아래 "iOS 오디오 세션" 섹션 반드시 숙지 |
+
+## 📱 iOS 오디오 세션 — 절대 규칙 (2026-04-24 교훈)
+
+### 핵심 원리
+iOS Safari는 **HTMLAudioElement가 실제로 재생 중**(paused=false, muted=false, volume>0)일 때만 오디오 세션을 활성 유지한다. 오디오 세션이 비활성되면 **Web Audio API(AudioContext)도 함께 죽는다**.
+
+### BGM과 SFX의 관계
+- BGM: `HTMLAudioElement` (bgmAudio) — base64 MP3
+- SFX: `Web Audio API` (sfxCtx/AudioContext) — oscillator 합성
+- iOS에서 BGM을 pause/mute/volume=0하면 오디오 세션 비활성 → SFX AudioContext suspended → 효과음 무음
+
+### 현재 해결 방식 (v3.25+)
+BGM OFF 시 `bgmAudio.pause()` + **무음 WAV를 별도 HTMLAudioElement(`_silentAudio`)로 루프 재생** (volume=0.01).
+→ iOS 오디오 세션 유지 → sfxCtx 정상 동작.
+
+### 오디오 수정 시 반드시 체크
+1. **BGM을 pause()하는 코드를 추가할 때**: `_silentAudio`가 대신 재생되는지 확인
+2. **새 HTMLAudioElement를 만들 때**: bgmOn=false면 _silentAudio 활성 상태인지 확인
+3. **테스트**: BGM 끈 상태에서 점프/적 처치 등 SFX가 나오는지 반드시 확인
+4. **volume=0, muted=true로 BGM 끄기 시도 금지** — iOS가 세션 비활성화함 (검증 완료)
+5. **AudioContext keep-alive oscillator로 세션 유지 시도 금지** — HTMLAudioElement와 별개 시스템이라 효과 없음 (검증 완료)
+
+### 실패한 접근들 (재시도 금지)
+| 방법 | 왜 실패 |
+|---|---|
+| `sfxCtx.resume()` (유저 제스처 내) | iOS가 세션 없으면 resume 무시 또는 즉시 재suspend |
+| `bgmAudio.muted = true` | iOS가 "출력 없음" 판단 → 세션 비활성화 |
+| `bgmAudio.volume = 0` | 동일 + 다른 코드가 볼륨 덮어쓰는 레이스 컨디션 |
+| AudioContext에 keep-alive oscillator | iOS 오디오 세션은 HTMLAudioElement 기반, AudioContext 무관 |
+| 무효한 WAV data URI | iOS가 파싱 실패 시 play() 조용히 실패 → 세션 유지 안 됨 |
+
+## 🖥️ 크로스 플랫폼 호환성 주의사항
+
+### roundRect 폴리필 (v8.11/v4.1+)
+- `CanvasRenderingContext2D.roundRect()`는 Chrome 99+, Firefox 112+, Safari 15.4+에서만 지원
+- 양쪽 파일 상단에 폴리필 추가됨 — **절대 삭제 금지**
+- 이미 지원하는 브라우저에서는 폴리필이 실행 안 됨 (안전)
+
+### Android 참고
+- `_silentAudio`는 iOS 전용 필요이지만 Android에서도 해 없음 (약간의 배터리 소모)
+- `navigator.share({files})`: 일부 Android 브라우저에서 실패 가능 → catch로 처리됨
+- `navigator.storage.persist()`: Android에서 자동 거부 가능 → catch로 처리됨
+
+### Windows 참고
+- PC 버전에 audio unlock 패턴 없음 → Chrome Autoplay Policy로 BGM 첫 재생 실패 가능하나, 유저가 클릭으로 게임 시작하면 자연 해결
 
 ### 유저 응답 원칙
 - **변경 전 체크리스트 공유**: "이걸 바꾸려면 A,B,C 3군데 수정 필요합니다. 진행할게요" 형태
